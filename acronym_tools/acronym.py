@@ -441,3 +441,42 @@ def create_gripper_marker(color=[0, 0, 255], tube_radius=0.001, sections=6):
     tmp.visual.face_colors = color
 
     return tmp
+
+
+def create_coordinate_frame_marker(color=[255,0,255], tube_radius=0.001, sections=6):
+    """Create a coordinate frame.
+
+    Args:
+        color (list, optional): RGB values of marker. Defaults to [0, 0, 255].
+        tube_radius (float, optional): Radius of cylinders. Defaults to 0.001.
+        sections (int, optional): Number of sections of each cylinder. Defaults to 6.
+
+    Returns:
+        trimesh.Trimesh: A mesh that represents a simple parallel yaw gripper.
+    """
+    xaxis = trimesh.creation.cylinder(
+        radius=0.002,
+        sections=sections,
+        segment=[
+            [0,0,0],
+            [1,0,0],
+        ],
+    )
+    yaxis = trimesh.creation.cylinder(
+        radius=0.002,
+        sections=sections,
+        segment=[
+            [0,0,0],
+            [0,1,0],
+        ],
+    )
+    zaxis = trimesh.creation.cylinder(
+        radius=0.002,
+        sections=sections, 
+        segment=[[0, 0, 0], [0,0,1]]
+    )
+
+    tmp = trimesh.util.concatenate([xaxis, yaxis, zaxis])
+    tmp.visual.face_colors = color
+
+    return tmp
