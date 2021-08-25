@@ -378,6 +378,23 @@ def load_mesh(filename, mesh_root_dir, scale=None):
     return obj_mesh
 
 
+import re
+def load_mesh_without_folder(id, scale, mesh_dir):
+    """ load_mnesh folders assumes the mesh files exist in <meshes>/<object name>/object_id.obj => 'meshes/Mug/10f6e09036350e92b3f21f1137c3c347.obj'
+    while we do not have a separte folder for each object in the original acronym dataset called <object name> or (Mug). we have it
+    in <meshes>/<models>/object_id.obj
+    Args:
+        filename (str): JSON or HDF5 file name.
+        scale (float, optional): If specified, use this as scale instead of value from the file. Defaults to None.
+
+    Returns:
+        trimesh.Trimesh: Mesh of the loaded object.
+    """
+    obj_mesh = trimesh.load_mesh(os.path.join(mesh_dir, id))
+    obj_mesh = obj_mesh.apply_scale(scale)
+
+    return obj_mesh
+
 def load_grasps(filename):
     """Load transformations and qualities of grasps from a JSON file from the dataset.
 
@@ -443,7 +460,7 @@ def create_gripper_marker(color=[0, 0, 255], tube_radius=0.001, sections=6):
     return tmp
 
 
-def create_coordinate_frame_marker(color=[255,0,255], tube_radius=0.001, sections=6):
+def create_coordinate_frame_marker(axis_length = 1, tube_radius=0.001, sections=6):
     """Create a coordinate frame.
 
     Args:
@@ -459,24 +476,30 @@ def create_coordinate_frame_marker(color=[255,0,255], tube_radius=0.001, section
         sections=sections,
         segment=[
             [0,0,0],
-            [1,0,0],
+            [axis_length,0,0],
         ],
     )
+    xaxis.visual.face_colors = [255, 0, 0]
+
     yaxis = trimesh.creation.cylinder(
         radius=0.002,
         sections=sections,
         segment=[
             [0,0,0],
-            [0,1,0],
+            [0,axis_length,0],
         ],
     )
+    yaxis.visual.face_colors = [0, 255, 0]
+
     zaxis = trimesh.creation.cylinder(
         radius=0.002,
         sections=sections, 
-        segment=[[0, 0, 0], [0,0,1]]
+        segment=[[0, 0, 0], [0,0,axis_length]]
     )
+    zaxis.visual.face_colors = [0, 0, 255]
 
     tmp = trimesh.util.concatenate([xaxis, yaxis, zaxis])
-    tmp.visual.face_colors = color
+    # tmp.visual.face_colors = color
 
     return tmp
+

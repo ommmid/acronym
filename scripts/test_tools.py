@@ -7,8 +7,12 @@ file_string = "/home/oheidari/acronym/data/examples/grasps/Mug_10f6e09036350e92b
 
 T, success = load_grasps(file_string)
 t = T[3]
-
+# t = transform.identity_matrix()
+# t[0,3] = 0 
+# t[1,3] = 0 
+# t[2,3] = 0
 gripper = create_gripper_marker(color=[0, 250, 0], tube_radius=0.0005).apply_transform(t)
+
 
 w = transform.identity_matrix()
 world_frame = create_coordinate_frame_marker(color=[0, 250, 0], tube_radius=0.0005).apply_transform(w)
@@ -24,9 +28,10 @@ m[0,3] = 0
 m[1,3] = 0 
 m[2,3] = 0
 mug = load_mesh(file_string, "../data/examples/").apply_transform(m)
-scene = trimesh.Scene(gripper + mug + world_frame + box)
+
+scene = trimesh.Scene(gripper + mug + world_frame + box )
 
 print('gripper with respect to world:\n', t)
-
+ 
 # visualize the scene
 scene.show()
