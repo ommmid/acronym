@@ -27,8 +27,9 @@ import json
 import trimesh
 import argparse
 import numpy as np
+import mypy
 
-from acronym_tools import load_mesh, load_grasps, create_gripper_marker
+from acronym_tools import load_mesh, load_grasps, create_gripper_marker, load_mesh_without_folder
 
 
 def make_parser():
@@ -52,7 +53,10 @@ def main(argv=sys.argv[1:]):
 
     for f in args.input:
         # load object mesh
-        obj_mesh = load_mesh(f, mesh_root_dir=args.mesh_root)
+        # obj_mesh = load_mesh(f, mesh_root_dir=args.mesh_root)
+        object_name, shapenet_id, acronym_scale_string = mypy.parse_(f, with_extension=True)
+        acronym_scale = float(acronym_scale_string)
+        obj_mesh = load_mesh_without_folder(shapenet_id + '.obj', acronym_scale, args.mesh_root)
 
         # get transformations and quality of all simulated grasps
         T, success = load_grasps(f)
@@ -72,3 +76,6 @@ def main(argv=sys.argv[1:]):
 
 if __name__ == "__main__":
     main()
+
+# use case:
+# python acronym_visualize_grasps.py --mesh_root /home/oheidari/acronym/data/acronym/meshes /home/oheidari/acronym/data/acronym/grasps/Mug_1ea9ea99ac8ed233bf355ac8109b9988_0.00016407252808445613.h5

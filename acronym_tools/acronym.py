@@ -420,7 +420,7 @@ def load_grasps(filename):
 
 def create_gripper_marker(color=[0, 0, 255], tube_radius=0.001, sections=6):
     """Create a 3D mesh visualizing a parallel yaw gripper. It consists of four cylinders.
-
+    
     Args:
         color (list, optional): RGB values of marker. Defaults to [0, 0, 255].
         tube_radius (float, optional): Radius of cylinders. Defaults to 0.001.
@@ -430,7 +430,7 @@ def create_gripper_marker(color=[0, 0, 255], tube_radius=0.001, sections=6):
         trimesh.Trimesh: A mesh that represents a simple parallel yaw gripper.
     """
     cfl = trimesh.creation.cylinder(
-        radius=0.002,
+        radius=tube_radius,
         sections=sections,
         segment=[
             [4.10000000e-02, -7.27595772e-12, 6.59999996e-02],
@@ -438,7 +438,7 @@ def create_gripper_marker(color=[0, 0, 255], tube_radius=0.001, sections=6):
         ],
     )
     cfr = trimesh.creation.cylinder(
-        radius=0.002,
+        radius=tube_radius,
         sections=sections,
         segment=[
             [-4.100000e-02, -7.27595772e-12, 6.59999996e-02],
@@ -446,10 +446,10 @@ def create_gripper_marker(color=[0, 0, 255], tube_radius=0.001, sections=6):
         ],
     )
     cb1 = trimesh.creation.cylinder(
-        radius=0.002, sections=sections, segment=[[0, 0, 0], [0, 0, 6.59999996e-02]]
+        radius=tube_radius, sections=sections, segment=[[0, 0, 0], [0, 0, 6.59999996e-02]]
     )
     cb2 = trimesh.creation.cylinder(
-        radius=0.002,
+        radius=tube_radius,
         sections=sections,
         segment=[[-4.100000e-02, 0, 6.59999996e-02], [4.100000e-02, 0, 6.59999996e-02]],
     )
@@ -472,7 +472,7 @@ def create_coordinate_frame_marker(axis_length = 1, tube_radius=0.001, sections=
         trimesh.Trimesh: A mesh that represents a simple parallel yaw gripper.
     """
     xaxis = trimesh.creation.cylinder(
-        radius=0.002,
+        radius=tube_radius,
         sections=sections,
         segment=[
             [0,0,0],
@@ -482,7 +482,7 @@ def create_coordinate_frame_marker(axis_length = 1, tube_radius=0.001, sections=
     xaxis.visual.face_colors = [255, 0, 0]
 
     yaxis = trimesh.creation.cylinder(
-        radius=0.002,
+        radius=tube_radius,
         sections=sections,
         segment=[
             [0,0,0],
@@ -492,7 +492,7 @@ def create_coordinate_frame_marker(axis_length = 1, tube_radius=0.001, sections=
     yaxis.visual.face_colors = [0, 255, 0]
 
     zaxis = trimesh.creation.cylinder(
-        radius=0.002,
+        radius=tube_radius,
         sections=sections, 
         segment=[[0, 0, 0], [0,0,axis_length]]
     )
